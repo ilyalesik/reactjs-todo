@@ -1,0 +1,107 @@
+.tasks-list {
+    list-style: none;
+    padding: 0;
+    height: 320px;
+}
+
+.tasks-list__item{
+    padding-right: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tasks-list__item-name {
+    padding: 10px 0;
+    line-height: 25px;
+    max-width: 695px;
+    overflow: hidden;
+}
+
+.tasks-list__item-name {
+    display: flex;
+    height: 25px;
+    align-items: center;
+}
+
+.tasks-list__item-name::before {
+    display: inline-block;
+    content: '';
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 2px #ecf0f5 solid;
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    background: white url('tick.svg') center no-repeat;
+    background-size: 70%;
+
+    transition: background-color ease-in 0.3s, border ease-in 0.3s;
+}
+
+.tasks-list__item-name:hover {
+    cursor: pointer;
+    transition: background-color ease-out 0.2s, border ease-out 0.2s;
+}
+
+.tasks-list__item-name:hover::before {
+    background-color: #18bc9c;
+    border: 2px #18bc9c solid;
+}
+
+.tasks-list__item_completed .tasks-list__item-name{
+    text-decoration: line-through;
+    color: #777;
+}
+
+.tasks-list__item_completed .tasks-list__item-name:before{
+    background-color: #ecf0f5;
+    border: 2px #ecf0f5 solid;
+}
+
+
+.tasks-list__item-remove{
+    border: none;
+    background: none;
+    outline: 0;
+    cursor: pointer;
+    height: 25px;
+    transition: color linear 0.2s;
+}
+
+.tasks-list__item-remove:hover{
+    color: #18bc9c;
+}
+
+.tasks-list__item_completed:before {
+    background-color: #ecf0f5;
+    border: 2px #ecf0f5 solid;
+}
+
+/* Transitions */
+.tasks-list__item-animation-enter {
+    opacity: 0.01;
+}
+
+.tasks-list__item-animation-enter.tasks-list__item-animation-enter-active {
+    opacity: 1;
+    transition: opacity 200ms linear;
+}
+
+.tasks-list__item-animation-leave {
+    opacity: 1;
+    max-height: 100px;
+    overflow: hidden;
+}
+
+.tasks-list__item-animation-leave.tasks-list__item-animation-leave-active {
+    opacity: 0.01;
+    max-height: 0;
+    transition: opacity 300ms linear, max-height 300ms linear;
+}
+
+@media (max-width: 820px) {
+    .tasks-list{
+        height: calc(100vh - 225px);
+    }
+}
