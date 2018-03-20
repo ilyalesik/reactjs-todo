@@ -12,7 +12,7 @@ class App extends Component {
         super(props);
 
         this.state = {
-            tasks: new Tasks()
+            tasks: undefined
         };
 
         // Bind this into functions
@@ -21,17 +21,25 @@ class App extends Component {
         this.destroyTask = this.destroyTask.bind(this);
     }
 
+    componentDidMount() {
+        const tasks = Tasks.load();
+        this.setState({
+            tasks
+        });
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextState.tasks !== this.state.tasks;
+    }
+
     /**
      * Creates new task
      * @param task
      */
     addTask(task) {
         this.setState(function (prevState) {
-            let newList = prevState.tasks;
-            newList.addTask(task);
-
             return {
-                tasks: newList
+                tasks: prevState.tasks.addTask(task)
             };
         });
     }
@@ -42,11 +50,8 @@ class App extends Component {
      */
     toggleStatus(id) {
         this.setState(function (prevState) {
-            let newList = prevState.tasks;
-            newList.setTaskStatus(id, !prevState.tasks.getTask(id).completed);
-
             return {
-                tasks: newList
+                tasks: prevState.tasks.setTaskStatus(id, !prevState.tasks.getTask(id).completed)
             };
         });
     }
@@ -57,11 +62,8 @@ class App extends Component {
      */
     destroyTask(id){
         this.setState(function (prevState) {
-            let newList = prevState.tasks;
-            newList.destroyTask(id);
-
             return {
-                tasks: newList
+                tasks: prevState.tasks.destroyTask(id)
             };
         });
     }
@@ -71,7 +73,7 @@ class App extends Component {
             <div>
                 <Header/>
                 <NewTaskInput addTask={this.addTask}/>
-                <TasksList tasks={this.state.tasks.tasksList} toggleStatus={this.toggleStatus} destroyTask={this.destroyTask}/>
+                <TasksList tasks={this.state.tasks ? this.state.tasks.tasksList : []} toggleStatus={this.toggleStatus} destroyTask={this.destroyTask}/>
             </div>
         );
     }

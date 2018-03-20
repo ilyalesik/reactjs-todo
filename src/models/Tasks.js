@@ -2,11 +2,9 @@
  * Container that is responsible for working with tasks list
  */
 class Tasks {
-    constructor() {
-        this._currentId = 0;
-        this._tasks = {};
-
-        this._load();
+    constructor(_currentId, _tasks) {
+        this._currentId = _currentId || 0;
+        this._tasks = _tasks || {};
     }
 
     /**
@@ -22,6 +20,7 @@ class Tasks {
         };
 
         this._save();
+        return new Tasks(this._currentId, this._tasks);
     }
 
     /**
@@ -49,6 +48,7 @@ class Tasks {
         this._tasks[id].completed = status;
 
         this._save();
+        return new Tasks(this._currentId, this._tasks);
     }
 
     /**
@@ -59,27 +59,30 @@ class Tasks {
         delete this._tasks[id];
 
         this._save();
+        return new Tasks(this._currentId, this._tasks);
     }
 
     /**
      * Loads tasks from storage
      * @private
      */
-    _load() {
+    static load() {
         // if no data, initialize it
         const currentId = localStorage.getItem('currentId');
         const tasks = localStorage.getItem('tasks');
 
         if(currentId === null || tasks === null){
-            this._currentId = 0;
-            this.tasks = {};
-            this._save();
+            const _currentId = 0;
+            const _tasks = {};
+            const newTasks = new Tasks(_currentId, _tasks);
+            newTasks._save();
 
-            return;
+            return newTasks;
         }
 
-        this._currentId = parseInt(currentId, 10);
-        this._tasks = JSON.parse(tasks);
+        const _currentId = parseInt(currentId, 10);
+        const _tasks = JSON.parse(tasks);
+        return new Tasks(_currentId, _tasks);
     }
 
     /**
